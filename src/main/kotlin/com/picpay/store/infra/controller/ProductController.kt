@@ -1,7 +1,7 @@
 package com.picpay.store.infra.controller
 
-import com.picpay.store.application.CreateProductUseCase
-import com.picpay.store.application.ListProductsUseCase
+import com.picpay.store.application.usecase.product.CreateProductUseCase
+import com.picpay.store.application.usecase.product.ListProductsUseCase
 import com.picpay.store.infra.controller.dto.ProductDTO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
