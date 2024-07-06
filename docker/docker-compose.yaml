@@ -1,0 +1,42 @@
+version: '3'
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    networks:
+      - dev-infra
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    networks:
+      - dev-infra
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+
+networks:
+  dev-infra:
+    external: true
+    name: dev-infra
+    driver: brigde
+volumes:
+  my-db:
+  prometheus_data:
+  grafana_data:
+  opensearch-data1:
