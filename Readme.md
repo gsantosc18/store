@@ -23,7 +23,7 @@ Este projeto é uma aplicação de gerenciamento de produtos e estoque desenvolv
 
 ### Pré-requisitos
 
-- JDK 11 ou superior
+- JDK 17 ou superior
 - Maven
 
 ### Passos para Executar

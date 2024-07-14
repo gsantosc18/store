@@ -1,17 +1,19 @@
 package com.github.gsantosc18.store.infra.database.entity
 
-import com.github.gsantosc18.store.domain.Product
-import com.github.gsantosc18.store.domain.ProductType
+import com.github.gsantosc18.store.domain.entity.Category
+import com.github.gsantosc18.store.domain.entity.Product
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToMany
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.annotations.UuidGenerator
 import java.math.BigDecimal
 import java.sql.Types
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "product")
@@ -20,19 +22,32 @@ data class ProductEntity(
     @UuidGenerator
     @JdbcTypeCode(Types.VARCHAR)
     val id: UUID? = null,
-    val title: String? = null,
-    val description: String? = null,
-    val amount: BigDecimal? = null,
-    @Enumerated(EnumType.STRING)
-    val productType: ProductType? = null
+    val title: String,
+    val description: String,
+    val amount: BigDecimal,
+    @ManyToMany
+    val category: List<Category> = emptyList(),
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
+    val inventory: InventoryEntity?
 ) {
 
+    constructor(): this(
+        id = null,
+        title = "",
+        description = "",
+        amount = BigDecimal.ZERO,
+        category = emptyList(),
+        inventory = null
+    )
+
     fun toDomain(): Product = Product(
-        id = id,
+        id = id.toString(),
         title = title,
         description = description,
         amount = amount,
-        productType = productType
+        categoryIds = category.mapNotNull(Category::id),
+        inventoryId = inventory?.let(InventoryEntity::id)
     )
 
     companion object {
@@ -41,7 +56,8 @@ data class ProductEntity(
             title = product.title,
             description = product.description,
             amount = product.amount,
-            productType = product.productType
+            category = product.categoryIds.map(::Category),
+            inventory = null
         )
     }
 }

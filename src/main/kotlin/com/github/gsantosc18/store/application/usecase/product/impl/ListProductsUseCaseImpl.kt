@@ -1,15 +1,13 @@
 package com.github.gsantosc18.store.application.usecase.product.impl
 
 import com.github.gsantosc18.store.application.usecase.product.ListProductsUseCase
-import com.github.gsantosc18.store.application.repository.ProductRepository
-import com.github.gsantosc18.store.domain.Product
-import org.springframework.stereotype.Service
+import com.github.gsantosc18.store.domain.entity.Product
+import com.github.gsantosc18.store.domain.repository.ListProductRepository
 
-@Service
 class ListProductsUseCaseImpl(
-    private val productRepository: ProductRepository
+    private val repository: ListProductRepository
 ): ListProductsUseCase {
-    override fun execute(): List<Product> {
-        return productRepository.findAll()
+    override fun handle(): List<Product> {
+        return repository.findAll()
     }
 }

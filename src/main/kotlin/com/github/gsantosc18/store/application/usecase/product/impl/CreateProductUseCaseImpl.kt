@@ -1,15 +1,13 @@
 package com.github.gsantosc18.store.application.usecase.product.impl
 
 import com.github.gsantosc18.store.application.usecase.product.CreateProductUseCase
-import com.github.gsantosc18.store.application.repository.ProductRepository
-import com.github.gsantosc18.store.domain.Product
-import org.springframework.stereotype.Service
+import com.github.gsantosc18.store.domain.entity.Product
+import com.github.gsantosc18.store.domain.repository.CreateProductRepository
 
-@Service
 class CreateProductUseCaseImpl(
-    private val productRepository: ProductRepository
+    private val repository: CreateProductRepository
 ): CreateProductUseCase {
-    override fun execute(product: Product) {
-        productRepository.save(product)
+    override fun handle(product: Product) {
+        repository.insert(product)
     }
 }
